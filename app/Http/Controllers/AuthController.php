@@ -50,6 +50,12 @@ class AuthController extends Controller
             ], 401);
         }
 
+        if ($user->status === 'inactive') {
+            return response()->json([
+                'message' => 'Your account is inactive.'
+            ], 403);
+        }
+
         return response()->json([
             'user' => $user,
             'token' => $user->createToken('api-token')->plainTextToken,
