@@ -46,12 +46,15 @@ class UserController extends Controller
         $user->role = $data['role'];
         $user->team = $data['team'] ?? null;
         $user->status = $data['status'];
-        $user->membership_expiration = $data['membership_expiration'];
+        $user->membership_expiration = !empty($data['membership_expiration'])? $data['membership_expiration']: null;
+        $user->syncRoles([$data['role']]);
         $user->save();
 
         return response()->json([
             'message' => 'User updated successfully',
-            'user' => $user
+            'user' => $user,
+            'roles' => $user->getRoleNames(),
+            'permissions' => $user->getAllPermissions()->pluck('name'),
         ]);
     }
 

@@ -29,9 +29,12 @@ class AuthController extends Controller
             'status' => $data['status'],
             'password' => Hash::make($data['password']),
         ]);
+        $user->assignRole($data['role']);
 
         return response()->json([
             'user' => $user,
+            'roles' => $user->getRoleNames(),
+            'permissions' => $user->getAllPermissions()->pluck('name'),
         ]);
     }
 
@@ -58,13 +61,21 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => $user,
+            'roles' => $user->getRoleNames(),
+            'permissions' => $user->getPermissionsViaRoles(),
             'token' => $user->createToken('api-token')->plainTextToken,
         ]);
     }
 
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user();
+
+        return response()->json([
+            'user' => $user,
+            'roles' => $user->getRoleNames(),
+            'permissions' => $user->getPermissionsViaRoles(),
+        ]);
     }
 
     public function logout(Request $request)
