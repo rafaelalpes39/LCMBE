@@ -6,6 +6,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MemberObligationController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -44,6 +45,12 @@ Route::get('/schedules/{id}', [ScheduleController::class, 'show']);
 Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
 Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
 Route::post('/schedules/{scheduleId}/time-in', [ScheduleController::class, 'timeIn']);
+
+Route::get('/obligations', [MemberObligationController::class, 'index']);
+Route::post('/obligations', [MemberObligationController::class, 'store']);
+Route::put('/obligations/{id}', [MemberObligationController::class, 'update']);
+Route::delete('/obligations/{id}', [MemberObligationController::class, 'destroy']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
